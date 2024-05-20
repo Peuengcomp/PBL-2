@@ -110,7 +110,7 @@ def tratar_dado(lista):
     imprimir = print("Percentual de casos suspeitos é: %s\n"
                     "Percentual de casos negativos é: %s\n" 
                     "Percentual de casos positivos é: %s\n" % (percentil_casos_suspeitos, percentil_casos_negativos, percentil_casos_positivos))
-    return imprimir
+    return None
 # Esta função retorna o bairro em todas as datas
 def buscar_bairro(bairro):
     dados = []
@@ -143,12 +143,20 @@ def buscar_intervalo_datas(data1, data2):
         if lista[0] == data1 or lista[0] == data2:
             dados.append(lista)
     return dados
+def buscar_intervalo_datas_bairro(data1, data2, bairro):
+    dados = []
+    dados.append(cabecalho())
+    for lista in matriz_de_dados():
+        if (lista[0] == data1 or lista[0] == data2) and lista[1] == bairro:
+            dados.append(lista)
+    return dados
 # Esta função exibe o menu e retorna a opção escolhida
 def opcao_busca():
-    print("[1] - Buscar para uma única data\n")
-    print("[2] - Buscar para um único bairro\n")
+    print("[1] - Buscar para um único bairro\n")
+    print("[2] - Buscar para uma única data\n")
     print("[3] - Buscar para data e bairro\n")
-    print("[4] - Buscar para intervalo entre datas\n") 
+    print("[4] - Buscar para intervalo entre datas\n")
+    print("[5] - Buscar intervalo entre datas para um único bairro\n")
     opcao = int(input())
     return opcao
 
@@ -204,9 +212,36 @@ while inicializador:
         elif opcao == 2:
             atualizar_csv(modificar_dados(matriz_de_dados()))
         elif opcao == 3:
-            bairro = codex(matriz_de_dados())
-            data = validar_implementar_data()
-            visualizar(buscar_bairro_data(data, bairro))
+            opcao_buscar = opcao_busca()
+            if opcao_buscar == 1:
+                bairro = codex(matriz_de_dados())
+                dado = buscar_bairro(bairro)
+                visualizar(dado)
+            elif opcao_buscar == 2:
+                data = validar_implementar_data()
+                dado = buscar_data(data)
+                visualizar(dado)
+            elif opcao_buscar == 3:
+                data = validar_implementar_data()
+                bairro = codex(matriz_de_dados())
+                dado = buscar_bairro_data(data, bairro)
+                visualizar(dado)
+                tratar_dado(dado[1])
+            elif opcao_buscar == 4:
+                print("Digite a primeira data:\n")
+                data1 = validar_implementar_data()
+                print("Digite a segunda data\n:")
+                data2 = validar_implementar_data()
+                dado = buscar_intervalo_datas(data1, data2)
+                visualizar(dado)
+            elif opcao_buscar == 5:
+                print("Digite a primeira data:\n")
+                data1 = validar_implementar_data()
+                print("Digite a segunda data\n:")
+                data2 = validar_implementar_data()
+                bairro = codex(matriz_de_dados())
+                dado = buscar_intervalo_datas_bairro(data1, data2, bairro)
+                visualizar(dado)
         else:
             print("Número inválido\n")
     elif escolha == 3:
