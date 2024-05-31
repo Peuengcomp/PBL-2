@@ -138,7 +138,8 @@ def tratar_dado_data_bairro(matriz):
     percentual_suspeitos = round((suspeitos/habitantes)*100, 2)
     percentual_positivos = round((positivos/habitantes)*100, 2)
     print(f"para a data {matriz[0][0]}, estes são os dados do bairro {matriz[0][1]}:\n")
-    print(f"Porcentagem de casos suspeitos: {percentual_suspeitos}%\n"
+    print(f"Total de habitantes do bairro é: {habitantes}\n"
+          f"Porcentagem de casos suspeitos: {percentual_suspeitos}%\n"
           f"Porcentagem de casos positivos: {percentual_positivos}%\n")
     return None
 
