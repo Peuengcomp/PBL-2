@@ -55,11 +55,12 @@ def modificar_dados(matriz):
         novos_casos_positivos_aux = int(input("Digite a quantidade de novos casos positivados\n"))
         novos_casos_negativos_aux = int(input("Digite a quantidade de novos casos negativados\n"))
         novos_casos_suspeitos_aux = int(input("Digite a quantidade de novos casos suspeitos\n"))
-        novos_casos_positivos = int(matriz[-lista][4]) + novos_casos_positivos_aux
-        novos_casos_negativos = int(matriz[-lista][5]) + novos_casos_negativos_aux
+        novos_casos_positivos = int(matriz[-lista][5]) + novos_casos_positivos_aux
+        novos_casos_negativos = int(matriz[-lista][4]) + novos_casos_negativos_aux
         novos_casos_suspeitos = int(matriz[-lista][3]) + novos_casos_suspeitos_aux - (novos_casos_positivos_aux + novos_casos_negativos_aux)
         soma_aux1 = novos_casos_positivos_aux + novos_casos_negativos_aux
         soma_aux2 = novos_casos_positivos + novos_casos_negativos + novos_casos_suspeitos
+        # Esta célula é responsável para validar a informação dos dados
         while soma_aux1 > int(matriz[-lista][3]) or soma_aux2 > int(matriz[-lista][2]):
             print("Há apenas %s habitantes, não pode haver excedente nos novos dados" % matriz[-lista][2])
             print("Há apenas %s casos suspeitos no bairro, não pode haver excedente de novos positivos e negativos\n" % matriz[-lista][3])
@@ -67,18 +68,19 @@ def modificar_dados(matriz):
             novos_casos_positivos_aux = int(input("Digite a quantidade de novos casos positivados\n"))
             novos_casos_negativos_aux = int(input("Digite a quantidade de novos casos negativados\n"))
             novos_casos_suspeitos_aux = int(input("Digite a quantidade de novos casos suspeitos\n"))
-            novos_casos_positivos = int(matriz[-lista][4]) + novos_casos_positivos_aux
-            novos_casos_negativos = int(matriz[-lista][5]) + novos_casos_negativos_aux
+            novos_casos_positivos = int(matriz[-lista][5]) + novos_casos_positivos_aux
+            novos_casos_negativos = int(matriz[-lista][4]) + novos_casos_negativos_aux
             novos_casos_suspeitos = int(matriz[-lista][3]) + novos_casos_suspeitos_aux - (novos_casos_positivos_aux + novos_casos_negativos_aux)
             soma_aux1 = novos_casos_positivos_aux + novos_casos_negativos_aux
             soma_aux2 = novos_casos_positivos + novos_casos_negativos + novos_casos_suspeitos
+        # Esta célula será responsável por incrementar estes novos dados
         insert_dados = []
         insert_dados.append(hoje)
         insert_dados.append(matriz[-lista][1])
         insert_dados.append(matriz[-lista][2])
         insert_dados.append(str(novos_casos_suspeitos))
-        insert_dados.append(str(novos_casos_positivos))
         insert_dados.append(str(novos_casos_negativos))
+        insert_dados.append(str(novos_casos_positivos))
         novos_dados.append(insert_dados)
     novos_dados.reverse()
     for lista in novos_dados:
@@ -118,6 +120,7 @@ def validar_implementar_data():
     data_validar = datetime.strptime(data, '%d/%m/%Y')
     matriz_primeira_data = datetime.strptime(matriz_de_dados()[1][0], '%d/%m/%Y')
     matriz_ultima_data = datetime.strptime(matriz_de_dados()[-1][0], '%d/%m/%Y')
+    
     while data_validar < matriz_primeira_data or data_validar > matriz_ultima_data:
         print("Digite valores válidos para a data\n")
         dia = int(input("Digite o dia:\n"))
@@ -125,6 +128,7 @@ def validar_implementar_data():
         ano = int(input("Digite o ano:\n"))
         data = "{:02d}/{:02d}/{:04d}".format(dia, mes, ano)
         data_validar = datetime.strptime(data, '%d/%m/%Y')
+    
     return data
 
 # Este bloco de funções são responsáveis por tratar os dados para cada tipo de busca feita
@@ -199,14 +203,12 @@ def tratar_dado_intervalo_data(data1, data2, matriz):
     print(f"Para a data {data2}, estes são os dados:\n")
     print(f"Total de casos negativos: {soma_casos_negativos_data2}\n"
           f"Total de casos positivos: {soma_casos_positivos_data2}\n")
-    if (soma_casos_negativos_data1 + soma_casos_positivos_data1 == 0) or (soma_casos_negativos_data2 + soma_casos_positivos_data2 == 0):
-        print("""Os dados percentuais não podem ser computados, pois os valores de uma das datas é nulo.
-              Isso pode indicar que uma das datas não está na base de dados\n""")
-    else:
-        print(f"""Para casos negativos, teve uma diferença de {abs(diferenca_total_negativos)} casos em números absolutos entre as datas, 
-            tendo {percebtual_negativos}% de alteração entre elas\n"""
-            f"""Para casos positivos, teve uma diferença de {abs(diferenca_total_positivos)} casos em núemeros absolutos entre as datas, 
-            tendo {percebtual_positivos}% de alteração entre elas\n""")
+    
+    print(f"""Para casos negativos, teve uma diferença de {abs(diferenca_total_negativos)} casos em números absolutos entre as datas, 
+        tendo {abs(percebtual_negativos)}% de alteração entre elas\n"""
+        f"""Para casos positivos, teve uma diferença de {abs(diferenca_total_positivos)} casos em núemeros absolutos entre as datas, 
+        tendo {abs(percebtual_positivos)}% de alteração entre elas\n""")
+    
     return None
 
 # Esta função calcula e retorna a quantidade e percentual de casos suspeitos, negativos e positivos em relação ao total de casos notificados
@@ -315,6 +317,7 @@ while inicializador:
             atualizar_csv(modificar_dados(matriz_de_dados()))
         elif opcao == 3:
             opcao_buscar = opcao_busca()
+            # Esta célula realiza a busca dos dados por bairro em uma data específica
             if opcao_buscar == 1:
                 data = validar_implementar_data()
                 bairro = codex(matriz_de_dados())
@@ -322,23 +325,27 @@ while inicializador:
                 visualizar(dado)
                 tratar_dado_data_bairro(dado)
                 sair()
+            # Esta célula realiza a busca dos dados por data
             elif opcao_buscar == 2:
                 data = validar_implementar_data()
                 dado = buscar_data(data)
                 visualizar(dado)
                 tratar_dado_data(data, dado)
                 sair()
+            # Esta célula realiza a busca dos dados nos intervalos de dados
             elif opcao_buscar == 3:
                 print("Digite a primeira data:\n")
                 data1 = validar_implementar_data()
                 print("Digite a segunda data:\n")
                 data2 = validar_implementar_data()
+                # Trata o erro de datas iguais e gerar problemas no tratamento de dados
                 while data1 == data2:
                     print("Digite datas diferentes\n")
                     print("Digite a primeira data:\n")
                     data1 = validar_implementar_data()
                     print("Digite a segunda data:\n")
                     data2 = validar_implementar_data()
+                # Realiza a busca e visualização dos dados tratados
                 dado = buscar_intervalo_datas(data1, data2)
                 visualizar(dado)
                 tratar_dado_intervalo_data(data1, data2, dado)
