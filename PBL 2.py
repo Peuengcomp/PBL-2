@@ -113,6 +113,7 @@ def codex(matriz):
 
 # Esta função é responsável por solicitar e validar a data inserida pelo usuário
 def validar_implementar_data():
+    print("Digite as datas conforme o padrão dd para dia; mm para mês; e aaaa para ano.\n")
     dia = int(input("Digite o dia:\n"))
     mes = int(input("Digite o mês:\n"))
     ano = int(input("Digite o ano:\n"))
